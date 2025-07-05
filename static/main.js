@@ -11,17 +11,23 @@ window.showToast = function (msg, type) {
     }, 2500);
 };
 
-// Dark mode toggle
-const darkToggle = document.getElementById('dark-toggle');
-if (darkToggle) {
-    darkToggle.onclick = function () {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+// Theme switching
+const THEMES = ['theme-light', 'theme-dark', 'theme-neon', 'theme-glass'];
+const themeToggle = document.getElementById('theme-toggle');
+function setTheme(theme) {
+    document.body.classList.remove(...THEMES);
+    document.body.classList.add(theme);
+    localStorage.setItem('theme', theme);
+}
+if (themeToggle) {
+    themeToggle.onclick = function () {
+        let current = THEMES.findIndex(t => document.body.classList.contains(t));
+        let next = (current + 1) % THEMES.length;
+        setTheme(THEMES[next]);
     };
-    // On load, set dark mode if previously chosen
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark');
-    }
+    // On load, set theme if previously chosen
+    const saved = localStorage.getItem('theme');
+    setTheme(saved && THEMES.includes(saved) ? saved : THEMES[0]);
 }
 
 // Animate progress bar fill
