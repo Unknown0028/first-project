@@ -1,41 +1,76 @@
-.container {
-    max-width: 400px;
-    margin: 40px auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-    padding: 24px 16px;
-    font-family: 'Segoe UI', Arial, sans-serif;
+:root {
+    --primary: #4f8cff;
+    --primary-dark: #2563eb;
+    --accent: #22c55e;
+    --danger: #ef4444;
+    --bg: #f3f6fa;
+    --card-bg: #fff;
+    --text: #222;
+    --muted: #aaa;
 }
-h1 {
+body {
+    background: var(--bg);
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: var(--text);
+}
+.header-bar {
+    background: var(--primary);
+    color: #fff;
+    padding: 18px 0 10px 0;
     text-align: center;
-    margin-bottom: 24px;
-    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.header-bar h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+.container {
+    max-width: 420px;
+    margin: 40px auto 20px auto;
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 28px 18px 18px 18px;
 }
 .add-form {
     display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 22px;
 }
 .add-form input {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+}
+.add-form input:focus {
+    border: 1.5px solid var(--primary);
 }
 .add-form button {
-    padding: 10px 18px;
+    padding: 0 18px;
     border: none;
     border-radius: 8px;
-    background: #4f8cff;
+    background: var(--primary);
     color: #fff;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
 }
 .add-form button:hover {
-    background: #2563eb;
+    background: var(--primary-dark);
+    transform: scale(1.08);
 }
 .todo-list {
     list-style: none;
@@ -47,42 +82,59 @@ h1 {
     justify-content: space-between;
     align-items: center;
     background: #f7f9fa;
-    margin-bottom: 10px;
-    padding: 12px 16px;
-    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 14px 18px;
+    border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     animation: fadeIn 0.5s;
     transition: background 0.2s;
 }
 .todo-item.completed span {
     text-decoration: line-through;
-    color: #aaa;
+    color: var(--muted);
     opacity: 0.7;
 }
 .actions a {
-    margin-left: 10px;
+    margin-left: 12px;
     text-decoration: none;
-    font-size: 1.2rem;
-    transition: transform 0.1s;
+    font-size: 1.3rem;
+    transition: transform 0.1s, color 0.2s;
+    vertical-align: middle;
+}
+.complete-btn {
+    color: var(--accent);
 }
 .complete-btn:hover {
-    color: #22c55e;
+    color: #16a34a;
     transform: scale(1.2);
 }
+.delete-btn {
+    color: var(--danger);
+}
 .delete-btn:hover {
-    color: #ef4444;
+    color: #b91c1c;
     transform: scale(1.2);
 }
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+.footer-bar {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1rem;
+    margin: 30px 0 10px 0;
+}
+.footer-bar i.fa-heart {
+    color: #ef4444;
+    margin: 0 2px;
+}
 @media (max-width: 500px) {
     .container {
         max-width: 98vw;
         padding: 12px 2vw;
     }
-    h1 {
-        font-size: 1.5rem;
+    .header-bar h1 {
+        font-size: 1.3rem;
     }
 } 
