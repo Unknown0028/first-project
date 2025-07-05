@@ -36,10 +36,38 @@ body {
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     padding: 28px 18px 18px 18px;
 }
+.nav-bar {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+.nav-bar a {
+    color: #fff;
+    background: var(--primary-dark);
+    padding: 6px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.nav-bar a:hover {
+    background: var(--accent);
+    color: #fff;
+}
 .add-form {
     display: flex;
     gap: 10px;
     margin-bottom: 22px;
+    flex-wrap: wrap;
+}
+.add-form input[type="text"] {
+    flex: 1 1 180px;
+    min-width: 0;
 }
 .add-form input {
     flex: 1;
@@ -156,4 +184,19 @@ body {
     box-shadow: 0 2px 8px rgba(79,140,255,0.08);
     letter-spacing: 0.5px;
     animation: fadeIn 0.8s;
+}
+.todo-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.todo-note {
+    font-size: 0.97rem;
+    color: var(--primary-dark);
+    background: #e0e7ff;
+    border-radius: 5px;
+    padding: 2px 8px;
+    margin-top: 2px;
+    font-style: italic;
+    word-break: break-word;
 } 

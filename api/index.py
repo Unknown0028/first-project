@@ -1,8 +1,10 @@
 import os
 import random
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from flask_sqlalchemy import SQLAlchemy
+import pandas as pd
+from io import BytesIO
 
 # Explicitly set template and static folder paths
 app = Flask(
@@ -22,6 +24,7 @@ class Meta(db.Model):
 class ToDo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
+    note = db.Column(db.String(500), nullable=True)
     completed = db.Column(db.Boolean, default=False)
 
 with app.app_context():
@@ -30,6 +33,10 @@ with app.app_context():
     if not Meta.query.first():
         db.session.add(Meta(last_reset=""))
         db.session.commit()
+    # Add note column if missing (for upgrades)
+    if not hasattr(ToDo, 'note'):
+        with db.engine.connect() as con:
+            con.execute('ALTER TABLE todo ADD COLUMN note VARCHAR(500)')
 
 MOTIVATIONAL_QUOTES = [
     "The secret of getting ahead is getting started.",
@@ -63,8 +70,9 @@ def index():
 @app.route('/add', methods=['POST'])
 def add():
     title = request.form.get('title')
+    note = request.form.get('note')
     if title:
-        new_todo = ToDo(title=title)
+        new_todo = ToDo(title=title, note=note)
         db.session.add(new_todo)
         db.session.commit()
     return redirect(url_for('index'))
@@ -82,5 +90,24 @@ def delete(todo_id):
     db.session.delete(todo)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/export')
+def export():
+    todos = ToDo.query.all()
+    data = [{
+        'Title': t.title,
+        'Note': t.note or '',
+        'Completed': 'Yes' if t.completed else 'No'
+    } for t in todos]
+    df = pd.DataFrame(data)
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='ToDos')
+    output.seek(0)
+    return send_file(output, download_name='todos.xlsx', as_attachment=True)
 
 app = app  # For Vercel 

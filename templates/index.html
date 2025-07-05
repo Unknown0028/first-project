@@ -10,18 +10,28 @@
 <body>
     <header class="header-bar">
         <h1><i class="fa-solid fa-list-check"></i> My To-Do List</h1>
+        <nav class="nav-bar">
+            <a href="/about"><i class="fa-solid fa-circle-info"></i> About</a>
+            <a href="/export"><i class="fa-solid fa-file-excel"></i> Export</a>
+        </nav>
     </header>
     <div class="center-outer">
       <div class="container">
         <div class="quote-bar">“{{ quote }}”</div>
         <form action="/add" method="post" class="add-form">
             <input type="text" name="title" placeholder="Add a new task..." required>
+            <input type="text" name="note" placeholder="Add a note (optional)...">
             <button type="submit" title="Add Task"><i class="fa-solid fa-plus"></i></button>
         </form>
         <ul class="todo-list">
             {% for todo in todos %}
             <li class="todo-item {% if todo.completed %}completed{% endif %}">
-                <span>{{ todo.title }}</span>
+                <div class="todo-main">
+                  <span>{{ todo.title }}</span>
+                  {% if todo.note %}
+                  <div class="todo-note">📝 {{ todo.note }}</div>
+                  {% endif %}
+                </div>
                 <div class="actions">
                     {% if not todo.completed %}
                     <a href="/complete/{{ todo.id }}" class="complete-btn" title="Mark as complete"><i class="fa-solid fa-check"></i></a>
