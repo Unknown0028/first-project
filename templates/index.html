@@ -19,7 +19,6 @@
     <div class="center-outer">
       <div class="container">
         <div class="quote-bar">“{{ quote }}”</div>
-        <button id="test-anim-btn" style="margin-bottom:18px;padding:10px 18px;background:#22c55e;color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer;">Test Animation</button>
         <div class="progress-bar-outer">
             <div class="progress-bar-inner" style="width: {{ (completed_count/total_count*100) if total_count else 0 }}%"></div>
             <span class="progress-label">{{ completed_count }}/{{ total_count }} completed</span>
@@ -70,16 +69,6 @@
         <span>Made with <i class="fa-solid fa-heart"></i> using Flask &amp; Vercel</span>
     </footer>
     <script src="/static/main.js"></script>
-    <script>
-      document.getElementById('test-anim-btn').onclick = function() {
-        window.showToast('🎉 Animation is working!', 'success');
-        const bar = document.querySelector('.progress-bar-inner');
-        if (bar) {
-          bar.style.width = '0';
-          setTimeout(() => { bar.style.width = '100%'; }, 100);
-        }
-      };
-    </script>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <script>

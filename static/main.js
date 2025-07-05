@@ -32,6 +32,11 @@ window.addEventListener('DOMContentLoaded', () => {
         bar.style.width = '0';
         setTimeout(() => { bar.style.width = width; }, 100);
     }
+    // Animate new tasks
+    document.querySelectorAll('.todo-item').forEach(li => {
+        li.classList.add('animated-in');
+        setTimeout(() => li.classList.remove('animated-in'), 600);
+    });
 });
 
 // Animate task completion (fade/slide)
@@ -41,6 +46,16 @@ document.querySelectorAll('.complete-btn').forEach(btn => {
         if (li) {
             li.style.transform = 'translateX(40px) scale(0.95)';
             li.style.opacity = '0.2';
+        }
+    });
+});
+
+// Animate task removal (delete)
+document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        const li = btn.closest('.todo-item');
+        if (li) {
+            li.classList.add('removing');
         }
     });
 }); 
