@@ -132,19 +132,23 @@ def about():
 
 @app.route('/export')
 def export():
-    todos = ToDo.query.all()
-    data = [{
-        'Title': t.title,
-        'Note': t.note or '',
-        'Completed': 'Yes' if t.completed else 'No',
-        'Due Date': t.due_date or ''
-    } for t in todos]
-    df = pd.DataFrame(data)
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='ToDos')
-    output.seek(0)
-    flash('Tasks exported to Excel!', 'info')
-    return send_file(output, download_name='todos.xlsx', as_attachment=True)
+    try:
+        todos = ToDo.query.all()
+        data = [{
+            'Title': t.title,
+            'Note': t.note or '',
+            'Completed': 'Yes' if t.completed else 'No',
+            'Due Date': t.due_date or ''
+        } for t in todos]
+        df = pd.DataFrame(data)
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='ToDos')
+        output.seek(0)
+        flash('Tasks exported to Excel!', 'info')
+        return send_file(output, download_name='todos.xlsx', as_attachment=True)
+    except Exception as e:
+        flash(f'Export failed: {e}', 'danger')
+        return redirect(url_for('index'))
 
 app = app  # For Vercel 
