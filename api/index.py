@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todos.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/todos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -44,5 +44,4 @@ def delete(todo_id):
     db.session.commit()
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True) 
+app = app  # For Vercel 
