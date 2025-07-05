@@ -13,26 +13,47 @@
         <nav class="nav-bar">
             <a href="/about"><i class="fa-solid fa-circle-info"></i> About</a>
             <a href="/export"><i class="fa-solid fa-file-excel"></i> Export</a>
+            <button id="dark-toggle" class="dark-toggle" title="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
         </nav>
     </header>
     <div class="center-outer">
       <div class="container">
         <div class="quote-bar">“{{ quote }}”</div>
+        <div class="progress-bar-outer">
+            <div class="progress-bar-inner" style="width: {{ (completed_count/total_count*100) if total_count else 0 }}%"></div>
+            <span class="progress-label">{{ completed_count }}/{{ total_count }} completed</span>
+        </div>
         <form action="/add" method="post" class="add-form">
             <input type="text" name="title" placeholder="Add a new task..." required>
             <input type="text" name="note" placeholder="Add a note (optional)...">
+            <input type="date" name="due_date" placeholder="Due date">
             <button type="submit" title="Add Task"><i class="fa-solid fa-plus"></i></button>
         </form>
+        <div class="search-filter-bar">
+            <form method="get" action="/" class="search-form">
+                <input type="text" name="search" value="{{ search }}" placeholder="Search tasks...">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            <div class="filter-btns">
+                <a href="/?filter=all" class="filter-btn{% if filter_status=='all' %} active{% endif %}">All</a>
+                <a href="/?filter=completed" class="filter-btn{% if filter_status=='completed' %} active{% endif %}">Completed</a>
+                <a href="/?filter=incomplete" class="filter-btn{% if filter_status=='incomplete' %} active{% endif %}">Incomplete</a>
+            </div>
+        </div>
         <ul class="todo-list">
             {% for todo in todos %}
-            <li class="todo-item {% if todo.completed %}completed{% endif %}">
+            <li class="todo-item {% if todo.completed %}completed{% endif %}{% if todo.id in overdue_ids %} overdue{% endif %}" data-id="{{ todo.id }}">
                 <div class="todo-main">
                   <span>{{ todo.title }}</span>
                   {% if todo.note %}
                   <div class="todo-note">📝 {{ todo.note }}</div>
                   {% endif %}
+                  {% if todo.due_date %}
+                  <div class="todo-due">Due: {{ todo.due_date }}</div>
+                  {% endif %}
                 </div>
                 <div class="actions">
+                    <a href="/edit/{{ todo.id }}" class="edit-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
                     {% if not todo.completed %}
                     <a href="/complete/{{ todo.id }}" class="complete-btn" title="Mark as complete"><i class="fa-solid fa-check"></i></a>
                     {% endif %}
@@ -43,8 +64,19 @@
         </ul>
       </div>
     </div>
+    <div id="toast-container"></div>
     <footer class="footer-bar">
         <span>Made with <i class="fa-solid fa-heart"></i> using Flask &amp; Vercel</span>
     </footer>
+    <script src="/static/main.js"></script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <script>
+        {% for category, message in messages %}
+          window.showToast && window.showToast("{{ message }}", "{{ category }}");
+        {% endfor %}
+        </script>
+      {% endif %}
+    {% endwith %}
 </body>
 </html> 
