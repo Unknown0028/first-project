@@ -141,7 +141,7 @@ def export():
     } for t in todos]
     df = pd.DataFrame(data)
     output = BytesIO()
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='ToDos')
     output.seek(0)
     flash('Tasks exported to Excel!', 'info')
