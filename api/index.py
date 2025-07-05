@@ -1,8 +1,13 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import os
 
-app = Flask(__name__)
+# Explicitly set template and static folder paths
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(__file__), '../templates'),
+    static_folder=os.path.join(os.path.dirname(__file__), '../static')
+)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/todos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
