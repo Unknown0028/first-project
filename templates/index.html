@@ -11,7 +11,9 @@
     <header class="header-bar">
         <h1><i class="fa-solid fa-list-check"></i> My To-Do List</h1>
     </header>
-    <div class="container">
+    <div class="center-outer">
+      <div class="container">
+        <div class="quote-bar">“{{ quote }}”</div>
         <form action="/add" method="post" class="add-form">
             <input type="text" name="title" placeholder="Add a new task..." required>
             <button type="submit" title="Add Task"><i class="fa-solid fa-plus"></i></button>
@@ -29,6 +31,7 @@
             </li>
             {% endfor %}
         </ul>
+      </div>
     </div>
     <footer class="footer-bar">
         <span>Made with <i class="fa-solid fa-heart"></i> using Flask &amp; Vercel</span>

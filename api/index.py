@@ -1,4 +1,6 @@
 import os
+import random
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
@@ -13,6 +15,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+class Meta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    last_reset = db.Column(db.String(10), default="")  # YYYY-MM-DD
+
 class ToDo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -20,11 +26,39 @@ class ToDo(db.Model):
 
 with app.app_context():
     db.create_all()
+    # Ensure Meta row exists
+    if not Meta.query.first():
+        db.session.add(Meta(last_reset=""))
+        db.session.commit()
+
+MOTIVATIONAL_QUOTES = [
+    "The secret of getting ahead is getting started.",
+    "Don't watch the clock; do what it does. Keep going.",
+    "It always seems impossible until it's done.",
+    "Success is the sum of small efforts, repeated day in and day out.",
+    "You don't have to be great to start, but you have to start to be great.",
+    "The future depends on what you do today.",
+    "Dream big. Start small. Act now.",
+    "Push yourself, because no one else is going to do it for you.",
+    "Great things never come from comfort zones.",
+    "Don't stop when you're tired. Stop when you're done."
+]
+
+def reset_todos_if_new_day():
+    today = datetime.now().strftime('%Y-%m-%d')
+    meta = Meta.query.first()
+    if meta.last_reset != today:
+        # Reset all todos to uncompleted
+        ToDo.query.update({ToDo.completed: False})
+        meta.last_reset = today
+        db.session.commit()
 
 @app.route('/')
 def index():
+    reset_todos_if_new_day()
     todos = ToDo.query.all()
-    return render_template('index.html', todos=todos)
+    quote = random.choice(MOTIVATIONAL_QUOTES)
+    return render_template('index.html', todos=todos, quote=quote)
 
 @app.route('/add', methods=['POST'])
 def add():

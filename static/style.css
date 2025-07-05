@@ -137,4 +137,23 @@ body {
     .header-bar h1 {
         font-size: 1.3rem;
     }
+}
+.center-outer {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.quote-bar {
+    background: linear-gradient(90deg, #4f8cff 0%, #22c55e 100%);
+    color: #fff;
+    font-size: 1.1rem;
+    font-style: italic;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    box-shadow: 0 2px 8px rgba(79,140,255,0.08);
+    letter-spacing: 0.5px;
+    animation: fadeIn 0.8s;
 } 
